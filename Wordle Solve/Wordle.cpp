@@ -7,7 +7,7 @@ int LettersRightWrongNum = 0;
 char LettersRightWrong[26];
 int LettersRightWrongPlace[26];
 int LettersRightNum = 0;
-char LettersRight[26];
+char LettersRight[5];
 int LettersRightPlace[26];
 double GetLetterPoints(char Letter, int Place);
 void PlayWordle();
@@ -24,7 +24,6 @@ struct WordInfo
 
 
 			Word = Words[WordOn];
-
 			WordOn++;
 			if (Word.length() != 5)
 			{
@@ -44,7 +43,7 @@ struct WordInfo
 					{
 						if (Word[i] == Word[j] && j != i)
 						{
-							Points -= GetLetterPoints(Word[i], i);
+							Points -= (GetLetterPoints(Word[i], i)* 0.5);
 						}
 
 					}
@@ -84,18 +83,13 @@ struct WordInfo
 						Points = 0;
 					}
 				}
+				// this code does not work needs fixing
 				for (int i = 0; i < LettersRightNum; i++)
 				{
-					if (Word.size() == 5)
+					if (Word[LettersRightPlace[i]] != LettersRight[i])
 					{
-						if (LettersRightNum > 0)
-						{
-							if (Word[LettersRightPlace[i]] != LettersRight[i])
-							{
-
-								DoNotUse = true;
-							}
-						}
+						DoNotUse = true;
+						break;
 					}
 				}
 			}
@@ -115,7 +109,7 @@ int main()
 	while (Play)
 	{
 		PlayWordle();
-		std::cout << "Do you want to use it agian or reset if it is a new word:" << std::endl;
+		std::cout << "Do you want to use it agian type 'yes' or 'reset' if you want to start over:" << std::endl;
 		std::cin >> Agian;
 		if (Agian == "yes" || Agian == "true")
 		{
@@ -124,6 +118,7 @@ int main()
 		else if(Agian == "reset")
 		{
 			Play = true;
+			system("CLS");
 			LettersWrongNum = 0;
 			LettersRightNum = 0;
 			LettersRightWrongNum = 0;
@@ -145,9 +140,8 @@ void PlayWordle()
 	{
 		std::cout << "enter the num " << i + 1 << " letter wrong" << std::endl;
 		std::cin >> LettersWrong[i + LettersWrongNum];
-		LettersWrongNum += LettersWrongNumTry;
-
 	}
+	LettersWrongNum += LettersWrongNumTry;
 	std::cout << "enter num of letters right but wrong place:" << std::endl;
 	int LettersRightWrongNumTry = 0;
 	std::cin >> LettersRightWrongNumTry;
@@ -159,8 +153,8 @@ void PlayWordle()
 		int value = 0;
 		std::cin >> value;
 		LettersRightWrongPlace[i + LettersRightWrongNum] = value - 1;
-		LettersRightWrongNum += LettersRightWrongNumTry;
 	}
+	LettersRightWrongNum += LettersRightWrongNumTry;
 	int LettersRightNumTry = 0;
 	std::cout << "enter num of letters right:" << std::endl;
 	std::cin >> LettersRightNumTry;
@@ -172,8 +166,8 @@ void PlayWordle()
 		int value = 0;
 		std::cin >> value;
 		LettersRightPlace[i + LettersRightNum] = value - 1;
-		LettersRightNum += LettersRightNumTry;
 	}
+	LettersRightNum += LettersRightNumTry;
 	WordInfo InfoWords[20000];
 	WordInfo BestWord = InfoWords[0];
 	WordInfo SecondWord = InfoWords[1];
@@ -210,6 +204,7 @@ void PlayWordle()
 			}
 		}
 	}
+
 	std::cout << "try: " << BestWord.Word << std::endl;
 	std::cout << "Or this: " << SecondWord.Word << std::endl;
 	std::cout << "third: " << ThirdWord.Word << std::endl;
